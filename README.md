@@ -1,0 +1,2 @@
+# BIC
+Binary Interpolative Coding
