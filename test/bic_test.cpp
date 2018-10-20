@@ -15,8 +15,25 @@
  */
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <vector>
 
 #include "bic/bic.hpp"
+#include "util.hpp"
+
+using ::testing::ContainerEq;
+
+TEST(bic, fuzzy) {
+    size_t n = 10000;
+    std::vector<uint8_t> buf(n);
+    std::vector<uint32_t> values = generate_random_vector(n);
+    make_strict(values);
+    bic::encode(buf.data(), values.data(), n);
+    std::vector<uint32_t> decoded_values(n);
+    bic::decode(decoded_values.data(), buf.data(), n);
+    EXPECT_EQ(decoded_values.size(), values.size());
+    EXPECT_THAT(decoded_values, ContainerEq(values));
+}
+
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
